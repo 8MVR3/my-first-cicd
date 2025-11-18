@@ -5,26 +5,22 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Setup Node.js (если используете JavaScript)
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies and build
-      run: |
-        npm install
-        npm run build
-      # или используйте команды для вашего фреймворка
+    - name: Setup Pages
+      id: pages
+      uses: actions/configure-pages@v3
       
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist  # или другая папка с билдом
+        path: ./
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
